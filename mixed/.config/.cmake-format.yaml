@@ -1,0 +1,31 @@
+# ----------------------------------
+# Options affecting formatting.
+# ----------------------------------
+# 行の最大文字数 (PEP8準拠の88文字)
+line_width: 88
+
+# タブサイズ (スペース4つ)
+tab_size: 4
+
+# ----------------------------------
+# Options affecting list processing.
+# ----------------------------------
+# リスト風の引数をどう並べるか（デフォルトtrue）
+# enable_sort: true
+
+# ----------------------------------
+# Options affecting comment reflow.
+# ----------------------------------
+# コメントも88文字で折り返すか
+enable_markup: true
+
+# ----------------------------------
+# Options affecting formatting of specific statements.
+# ----------------------------------
+# CMakeコマンドの大文字・小文字設定
+# 'lower', 'upper', 'unchanged' が選択可能
+command_case: "lower"
+
+# 変数名の大文字・小文字設定
+# ${VAR} のような変数をどうするか
+keyword_case: "unchanged"

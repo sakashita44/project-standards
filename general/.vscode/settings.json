@@ -1,0 +1,17 @@
+{
+    // Markdown設定
+    "[markdown]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.tabSize": 4,
+        "editor.formatOnSave": true
+    },
+    // Prettier設定
+    "prettier.configPath": ".config/.prettierrc",
+    "prettier.ignorePath": ".config/.prettierignore",
+    // markdownlint設定（プロジェクト共通）
+    "markdownlint.configFile": ".config/.markdownlint.jsonc",
+    // Markdown All in One設定
+    "markdown.extension.orderedList.marker": "one",
+    "markdown.extension.list.indentationSize": "inherit",
+    "markdown.extension.toc.unorderedList.marker": "-"
+}

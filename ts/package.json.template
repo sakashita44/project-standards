@@ -1,0 +1,28 @@
+{
+    "name": "PLACEHOLDER_NAME",
+    "version": "0.0.1",
+    "private": true,
+    "description": "PLACEHOLDER_DESCRIPTION",
+    "scripts": {
+        "dev": "PLACEHOLDER_DEV_COMMAND",
+        "build": "PLACEHOLDER_BUILD_COMMAND",
+        "lint": "eslint . && markdownlint-cli2 --config .config/.markdownlint.jsonc \"**/*.md\" \"#node_modules\"",
+        "format": "prettier --config .config/.prettierrc --ignore-path .config/.prettierignore --write \"**/*.{ts,tsx,json,md}\" && eslint --fix .",
+        "format:check": "prettier --config .config/.prettierrc --ignore-path .config/.prettierignore --check \"**/*.{ts,tsx,json,md}\"",
+        "test": "vitest run",
+        "prepare": "husky"
+    },
+    "devDependencies": {
+        "@eslint/js": "^9.39.3",
+        "@types/node": "^22.0.0",
+        "eslint": "^9.39.3",
+        "globals": "^15.15.0",
+        "husky": "^9.1.7",
+        "lint-staged": "^15.5.2",
+        "markdownlint-cli2": "^0.20.0",
+        "prettier": "^3.8.1",
+        "typescript": "^5.9.3",
+        "typescript-eslint": "^8.56.1",
+        "vitest": "^4.0.18"
+    }
+}

@@ -1,0 +1,23 @@
+[project]
+name = "PLACEHOLDER_NAME"
+version = "0.1.0"
+description = "PLACEHOLDER_DESCRIPTION"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = []
+
+[dependency-groups]
+dev = [
+    "pre-commit>=4.5.1",
+    "pytest>=8.0",
+    "ruff>=0.9.4",
+]
+
+# 配布パッケージとしてビルドする場合のみ有効化する (uv_build は src/<パッケージ名>/ レイアウトを要求する)
+# 非パッケージ (解析・スクリプト等) では build-system を定義しないこと (uv が仮想プロジェクトとして扱う)
+# [build-system]
+# requires = ["uv_build>=0.9.11,<0.10.0"]
+# build-backend = "uv_build"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

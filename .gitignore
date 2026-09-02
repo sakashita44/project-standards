@@ -1,0 +1,10 @@
+# Node.js
+node_modules/
+
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+
+# エディタ・OS
+.DS_Store

@@ -1,0 +1,21 @@
+---
+# 言語指定
+Language: Cpp
+
+# ベースとするスタイル：中括弧が次の行に来るMicrosoftスタイル
+BasedOnStyle: Microsoft
+
+# インデント幅を4にする
+IndentWidth: 4
+# タブ幅を4にする
+TabWidth: 4
+
+# public/private はインデントレベルから4つ戻す（＝classと揃える）
+# 計算: 現在のインデント(4) + オフセット(-4) = 0 (左端)
+AccessModifierOffset: -4
+
+# 継続行（改行された長い式など）のインデント幅を4にする
+ContinuationIndentWidth: 4
+
+# 行の最大長を88に制限する(PEP 8推奨に準拠)
+ColumnLimit: 88

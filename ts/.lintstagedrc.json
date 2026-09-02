@@ -1,0 +1,13 @@
+{
+    "*.{ts,tsx}": [
+        "prettier --config .config/.prettierrc --ignore-path .config/.prettierignore --write",
+        "eslint --fix"
+    ],
+    "*.json": [
+        "prettier --config .config/.prettierrc --ignore-path .config/.prettierignore --write"
+    ],
+    "*.md": [
+        "prettier --config .config/.prettierrc --ignore-path .config/.prettierignore --write",
+        "markdownlint-cli2 --config .config/.markdownlint.jsonc --fix"
+    ]
+}
