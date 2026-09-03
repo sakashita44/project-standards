@@ -3,6 +3,12 @@
 default_stages: [pre-commit]
 
 repos:
+    # シークレット混入の検出
+    - repo: https://github.com/gitleaks/gitleaks
+      rev: v8.30.1
+      hooks:
+          - id: gitleaks
+
     # コードフォーマッター (Prettier)
     - repo: https://github.com/pre-commit/mirrors-prettier
       # mirrors-prettier はアーカイブ済みで v4.0.0-alpha.8 が最終版。
@@ -12,31 +18,27 @@ repos:
           - id: prettier
             types_or: [markdown, json, yaml, toml]
             additional_dependencies:
-                ["prettier@3.4.2", "prettier-plugin-toml@2.0.1"]
-            args:
-                [
-                    --write,
-                    --config=.config/.prettierrc,
-                    --ignore-path=.config/.prettierignore,
-                ]
+                ["prettier@3.9.6", "prettier-plugin-toml@2.0.6"]
+            # Prettier 3 はプラグインを自動読み込みしないため明示する。
+            # 共有の .prettierrc ではなくここで渡すのは、node_modules を持たない
+            # リポジトリでエディタ側の Prettier がプラグインを解決できず全体が壊れるため
+            args: [--write, --plugin=prettier-plugin-toml]
 
     # Pythonコードフォーマッター・リンター (Ruff)
     - repo: https://github.com/astral-sh/ruff-pre-commit
       rev: v0.16.5
       hooks:
           - id: ruff-check
-            args: [--fix, --config=.config/ruff.toml]
+            args: [--fix]
           - id: ruff-format
-            args: [--config=.config/ruff.toml]
 
     # Markdownリント
     - repo: https://github.com/DavidAnson/markdownlint-cli2
       rev: v0.23.2
       hooks:
           - id: markdownlint-cli2
-            args: [--config, .config/.markdownlint.jsonc]
 
-    # 末尾空白・ファイル末尾改行の修正
+    # 一般的な誤りの検出・修正
     - repo: https://github.com/pre-commit/pre-commit-hooks
       rev: v6.0.0
       hooks:
@@ -45,9 +47,10 @@ repos:
           - id: end-of-file-fixer
           - id: mixed-line-ending
             args: [--fix=lf]
+          - id: check-merge-conflict
+          - id: check-yaml
+          - id: check-added-large-files
 
-    # リポジトリ全体を見る検査 (push 時)
-    # pre-commit の隔離環境ではプロジェクトの依存を解決できないため、
     # リポジトリ全体を見る検査 (push 時)
     # pre-commit の隔離環境ではプロジェクトの依存を解決できないため、
     # uv の仮想環境をそのまま使う local フックとして実行する。
