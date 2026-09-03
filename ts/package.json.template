@@ -7,9 +7,9 @@
         "dev": "PLACEHOLDER_DEV_COMMAND",
         "build": "PLACEHOLDER_BUILD_COMMAND",
         "typecheck": "tsc --noEmit",
-        "lint": "eslint . && markdownlint-cli2 --config .config/.markdownlint.jsonc \"**/*.md\" \"#node_modules\"",
-        "format": "prettier --config .config/.prettierrc --ignore-path .config/.prettierignore --write \"**/*.{ts,tsx,json,md}\" && eslint --fix .",
-        "format:check": "prettier --config .config/.prettierrc --ignore-path .config/.prettierignore --check \"**/*.{ts,tsx,json,md}\"",
+        "lint": "eslint . && markdownlint-cli2 \"**/*.md\"",
+        "format": "prettier --write \"**/*.{ts,tsx,json,yml,yaml,md}\" && eslint --fix .",
+        "format:check": "prettier --check \"**/*.{ts,tsx,json,yml,yaml,md}\"",
         "test": "vitest run --passWithNoTests",
         "prepare": "husky"
     },
@@ -20,8 +20,8 @@
         "globals": "^15.15.0",
         "husky": "^9.1.7",
         "lint-staged": "^15.5.2",
-        "markdownlint-cli2": "^0.20.0",
-        "prettier": "^3.8.1",
+        "markdownlint-cli2": "^0.23.2",
+        "prettier": "^3.9.6",
         "typescript": "^5.9.3",
         "typescript-eslint": "^8.56.1",
         "vitest": "^4.0.18"
