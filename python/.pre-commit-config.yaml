@@ -16,13 +16,11 @@ repos:
       rev: v4.0.0-alpha.8
       hooks:
           - id: prettier
-            types_or: [markdown, json, yaml, toml]
-            additional_dependencies:
-                ["prettier@3.9.6", "prettier-plugin-toml@2.0.6"]
-            # Prettier 3 はプラグインを自動読み込みしないため明示する。
-            # 共有の .prettierrc ではなくここで渡すのは、node_modules を持たない
-            # リポジトリでエディタ側の Prettier がプラグインを解決できず全体が壊れるため
-            args: [--write, --plugin=prettier-plugin-toml]
+            # toml は対象外。prettier はプラグインを対象ファイル側から解決するため、
+            # pre-commit の隔離環境へ入れた prettier-plugin-toml を読み込めない
+            types_or: [markdown, json, yaml]
+            additional_dependencies: ['prettier@3.9.6']
+            args: [--write]
 
     # Pythonコードフォーマッター・リンター (Ruff)
     - repo: https://github.com/astral-sh/ruff-pre-commit

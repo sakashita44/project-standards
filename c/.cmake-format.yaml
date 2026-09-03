@@ -24,8 +24,8 @@ enable_markup: true
 # ----------------------------------
 # CMakeコマンドの大文字・小文字設定
 # 'lower', 'upper', 'unchanged' が選択可能
-command_case: "lower"
+command_case: 'lower'
 
 # 変数名の大文字・小文字設定
 # ${VAR} のような変数をどうするか
-keyword_case: "unchanged"
+keyword_case: 'unchanged'

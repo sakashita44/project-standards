@@ -4,33 +4,33 @@
 version: 2
 updates:
     # GitHub Actions は全リポジトリ共通で有効化する
-    - package-ecosystem: "github-actions"
-      directory: "/"
+    - package-ecosystem: 'github-actions'
+      directory: '/'
       schedule:
-          interval: "weekly"
+          interval: 'weekly'
       groups:
           # update-types を指定せず major も含めて 1 PR へ集約する
           actions:
-              patterns: ["*"]
+              patterns: ['*']
 
     # npm を使用するリポジトリ（ts/ 系）ではコメントアウトを解除する
-    # - package-ecosystem: "npm"
-    #   directory: "/"
+    # - package-ecosystem: 'npm'
+    #   directory: '/'
     #   schedule:
-    #       interval: "weekly"
+    #       interval: 'weekly'
     #   groups:
     #       npm:
-    #           patterns: ["*"]
+    #           patterns: ['*']
     #   # 特定の版へ固定したい依存はここで更新を止める（展開先ごとの判断）
     #   ignore:
-    #       - dependency-name: "PLACEHOLDER_PACKAGE"
-    #         update-types: ["version-update:semver-major"]
+    #       - dependency-name: 'PLACEHOLDER_PACKAGE'
+    #         update-types: ['version-update:semver-major']
 
     # uv を使用するリポジトリ（python/, c/ 系）ではコメントアウトを解除する
-    # - package-ecosystem: "uv"
-    #   directory: "/"
+    # - package-ecosystem: 'uv'
+    #   directory: '/'
     #   schedule:
-    #       interval: "weekly"
+    #       interval: 'weekly'
     #   groups:
     #       uv:
-    #           patterns: ["*"]
+    #           patterns: ['*']
