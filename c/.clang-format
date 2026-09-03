@@ -17,5 +17,5 @@ AccessModifierOffset: -4
 # 継続行（改行された長い式など）のインデント幅を4にする
 ContinuationIndentWidth: 4
 
-# 行の最大長を88に制限する(PEP 8推奨に準拠)
+# 行の最大長を88に制限する (python 層の ruff と桁数を揃えるため)
 ColumnLimit: 88

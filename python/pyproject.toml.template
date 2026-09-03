@@ -23,7 +23,5 @@ dev = [
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 
-# pyright は設定ファイルからの相対パスで include/exclude を解決するため、
-# .config/ へ切り出さず pyproject.toml へ置く
 [tool.pyright]
 typeCheckingMode = "strict"

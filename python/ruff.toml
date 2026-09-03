@@ -1,4 +1,5 @@
-target-version = "py313"
+# target-version は指定しない。設定ファイルを --config で直接渡さない限り、
+# ruff が pyproject.toml の requires-python から推論するため、版の記述を一箇所に保てる
 line-length = 88
 
 [lint]
