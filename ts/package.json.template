@@ -6,10 +6,11 @@
     "scripts": {
         "dev": "PLACEHOLDER_DEV_COMMAND",
         "build": "PLACEHOLDER_BUILD_COMMAND",
+        "typecheck": "tsc --noEmit",
         "lint": "eslint . && markdownlint-cli2 --config .config/.markdownlint.jsonc \"**/*.md\" \"#node_modules\"",
         "format": "prettier --config .config/.prettierrc --ignore-path .config/.prettierignore --write \"**/*.{ts,tsx,json,md}\" && eslint --fix .",
         "format:check": "prettier --config .config/.prettierrc --ignore-path .config/.prettierignore --check \"**/*.{ts,tsx,json,md}\"",
-        "test": "vitest run",
+        "test": "vitest run --passWithNoTests",
         "prepare": "husky"
     },
     "devDependencies": {
