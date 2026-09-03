@@ -15,7 +15,7 @@ updates:
     #   schedule:
     #       interval: "weekly"
 
-    # uv を使用するリポジトリ（python/, mixed/ 系）ではコメントアウトを解除する
+    # uv を使用するリポジトリ（python/, c/ 系）ではコメントアウトを解除する
     # - package-ecosystem: "uv"
     #   directory: "/"
     #   schedule:
