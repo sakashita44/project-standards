@@ -25,7 +25,8 @@
 - pre-commit の各フックを最新へ更新（ruff `v0.16.5`、markdownlint-cli2 `v0.23.2`、pre-commit-hooks `v6.0.0`、clang-format `v23.1.0`）。ruff の hook id を `ruff-check` へ、開発依存の下限を `ruff>=0.16.5` へ揃えた
 - 設定ファイルを `.config/` から、展開先でリポジトリルートへ並ぶ位置へ移動。各ツールは対象ファイルから上位ディレクトリへ遡る探索しか行わず、`.config/` は全呼び出しでの `--config` 指定とエディタ側への経路指定を要求していた。約 20 箇所の設定パス指定が不要になった
 - markdownlint の設定を `.markdownlint-cli2.jsonc` へ集約し、除外指定を `gitignore` オプションへ移した
-- prettier の TOML 整形を `--plugin=prettier-plugin-toml` の明示指定で有効化。Prettier 3 はプラグインを自動読み込みしないため、`prettier-plugin-toml` は依存に入っていても読み込まれず、`types_or` の `toml` が機能していなかった。共有の `.prettierrc` ではなくフック引数で渡すのは、node_modules を持たないリポジトリでエディタ側の Prettier がプラグインを解決できず整形全体が壊れるため
+- prettier の対象から toml を外し、`prettier-plugin-toml` への依存を削除。Prettier 3 はプラグインを自動読み込みせず、`--plugin` や設定の `plugins` で指定してもプラグインを対象ファイル側から解決するため、pre-commit の隔離環境へ入れたプラグインは読み込めない。`types_or` の `toml` は依存に入っていても機能しておらず、明示指定するとフック自体が失敗する
+- 配布する設定ファイル自身を prettier の整形結果へ揃えた（`dependabot.yml`、`.markdownlint-cli2.jsonc`、`.pre-commit-config.yaml`、`.cmake-format.yaml`）。`.prettierrc` の `singleQuote` に対して二重引用符のまま配布しており、展開直後の検査で整形差分が出ていた
 - prettier と markdownlint-cli2 の版を層をまたいで統一（prettier `3.9.6`、markdownlint-cli2 `0.23.2`）。同じ設定を共有しながら実行される版が層ごとに違い、同じファイルの整形結果がぶれていた
 - `ruff.toml` から `target-version` を削除。設定ファイルを `--config` で渡さなくなったため `requires-python` から推論され、Python の版の記述が一箇所に収まる
 - `c/.pre-commit-config.yaml` へ、python 側との同期方法を示すコメントと C/C++ 固有部分の境界を追加。pre-commit に設定の include/extends が無く、全文複製が避けられないため
