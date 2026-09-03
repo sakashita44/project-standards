@@ -9,8 +9,9 @@ dependencies = []
 [dependency-groups]
 dev = [
     "pre-commit>=4.5.1",
+    "pyright>=1.1.400",
     "pytest>=8.0",
-    "ruff>=0.9.4",
+    "ruff>=0.16.5",
 ]
 
 # 配布パッケージとしてビルドする場合のみ有効化する (uv_build は src/<パッケージ名>/ レイアウトを要求する)
@@ -21,3 +22,8 @@ dev = [
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+
+# pyright は設定ファイルからの相対パスで include/exclude を解決するため、
+# .config/ へ切り出さず pyproject.toml へ置く
+[tool.pyright]
+typeCheckingMode = "strict"
