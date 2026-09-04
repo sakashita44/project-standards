@@ -1,5 +1,8 @@
 # pre-commit フック設定
-# 使い方: uv run pre-commit install --hook-type pre-commit --hook-type pre-push
+# 使い方: uvx pre-commit install --hook-type pre-commit --hook-type pre-push
+#
+# 実装言語に依らず全リポジトリが持つ共通の品質ゲート。
+# 言語別レイヤは自身の追加フックをこのファイルの末尾へ追記する
 default_stages: [pre-commit]
 
 repos:
@@ -22,14 +25,6 @@ repos:
             additional_dependencies: ['prettier@3.9.6']
             args: [--write]
 
-    # Pythonコードフォーマッター・リンター (Ruff)
-    - repo: https://github.com/astral-sh/ruff-pre-commit
-      rev: v0.16.5
-      hooks:
-          - id: ruff-check
-            args: [--fix]
-          - id: ruff-format
-
     # Markdownリント
     - repo: https://github.com/DavidAnson/markdownlint-cli2
       rev: v0.23.2
@@ -48,26 +43,3 @@ repos:
           - id: check-merge-conflict
           - id: check-yaml
           - id: check-added-large-files
-
-    # リポジトリ全体を見る検査 (push 時)
-    # pre-commit の隔離環境ではプロジェクトの依存を解決できないため、
-    # uv の仮想環境をそのまま使う local フックとして実行する。
-    # types で絞ると Python ファイルを含まない push でスキップされるため always_run にする
-    - repo: local
-      hooks:
-          - id: pyright
-            name: pyright (型検査)
-            entry: uv run pyright
-            language: system
-            always_run: true
-            pass_filenames: false
-            stages: [pre-push]
-
-          # テストを書いたら有効化する
-          # - id: pytest
-          #   name: pytest
-          #   entry: uv run pytest
-          #   language: system
-          #   always_run: true
-          #   pass_filenames: false
-          #   stages: [pre-push]
