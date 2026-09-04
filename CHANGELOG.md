@@ -4,6 +4,26 @@
 
 設定はコピーした時点のスナップショットであり、展開先へは伝搬しない。展開先が現在の正本との差分を知るには、そのリポジトリを作成した日付以降の項目を読む。
 
+## 2026-09-04
+
+### Added
+
+- 実装言語に依存しない共通の品質ゲート（`general/.pre-commit-config.yaml`、`general/scripts/setup.sh`、`general/github-workflows/ci.yml`）。gitleaks、prettier、markdownlint-cli2、pre-commit-hooks を `general/` だけで実行できる。フックの実行環境は pre-commit が自前で用意するため、展開先に言語ランタイムを要求しない。CI は `uvx pre-commit run --all-files` を実行する
+- ts へのシークレット検出（gitleaks）。GitHub の secret scanning push protection は public リポジトリでのみ無償で働き、private リポジトリでは Secret Protection を要するため、ts だけ検出手段が無い状態だった
+- ts の CI へ共通ゲートのジョブ。npm の依存を入れたうえで `uvx pre-commit run --all-files` を実行する。reusable-node-ci は pre-commit を実行しないため、ts の CI だけ共通検査が抜けていた
+- ts の `scripts/setup.sh`。`npm install` とフックの有効化を他種別と同じ入口へ揃えた
+
+### Changed
+
+- フックの実行基盤を全種別で pre-commit framework へ統一。共通検査と言語別検査が同じ設定に載り、実行経路が種別ごとに分かれなくなった
+- 言語別レイヤの pre-commit 設定を、共通ゲートへ追記する差分（`.pre-commit-config.<種別>.yaml`）へ縮小。`c/` が `python/` の設定を全文複製する必要がなくなった。展開手順に追記の操作を追加した
+- ts の整形とリントを local フック（`npx prettier`、`npx eslint`）へ、型検査を pre-push ステージへ移した
+- ts の npm スクリプト `lint`、`format`、`format:check` の対象を TypeScript へ限定し、`markdownlint-cli2` を開発依存から外した。Markdown、JSON、YAML の検査は共通ゲートが担う
+
+### Removed
+
+- ts の husky と lint-staged（`.husky/`、`.lintstagedrc.json`、`package.json` の依存と `prepare` スクリプト）。pre-commit がステージ済みファイルへの実行を担うため
+
 ## 2026-09-03
 
 ### Added
