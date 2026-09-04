@@ -1,0 +1,32 @@
+    # ---- python レイヤの追加フック (展開時に追記した部分) ----
+
+    # Pythonコードフォーマッター・リンター (Ruff)
+    - repo: https://github.com/astral-sh/ruff-pre-commit
+      rev: v0.16.5
+      hooks:
+          - id: ruff-check
+            args: [--fix]
+          - id: ruff-format
+
+    # リポジトリ全体を見る検査 (push 時)
+    # pre-commit の隔離環境ではプロジェクトの依存を解決できないため、
+    # uv の仮想環境をそのまま使う local フックとして実行する。
+    # types で絞ると Python ファイルを含まない push でスキップされるため always_run にする
+    - repo: local
+      hooks:
+          - id: pyright
+            name: pyright (型検査)
+            entry: uv run pyright
+            language: system
+            always_run: true
+            pass_filenames: false
+            stages: [pre-push]
+
+          # テストを書いたら有効化する
+          # - id: pytest
+          #   name: pytest
+          #   entry: uv run pytest
+          #   language: system
+          #   always_run: true
+          #   pass_filenames: false
+          #   stages: [pre-push]

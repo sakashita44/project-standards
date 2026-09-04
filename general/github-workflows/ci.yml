@@ -1,0 +1,25 @@
+name: CI
+
+on:
+    pull_request:
+        branches:
+            - main
+
+jobs:
+    lint:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            # 共通ゲートは pre-commit だけで完結する。
+            # フックの実行環境 (node, go 等) は pre-commit が自前で用意するため、
+            # リポジトリの実装言語を問わずこのジョブだけで足りる
+            - name: Setup uv
+              uses: astral-sh/setup-uv@v5
+              with:
+                  enable-cache: true
+
+            # 設定変更で既存ファイルが違反になった場合も検出するため、全ファイルへ掛ける
+            - name: Run pre-commit hooks
+              run: uvx pre-commit run --all-files --show-diff-on-failure
