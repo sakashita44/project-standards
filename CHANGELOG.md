@@ -10,7 +10,7 @@
 
 - 実装言語に依存しない共通の品質ゲート（`general/.pre-commit-config.yaml`、`general/scripts/setup.sh`、`general/github-workflows/ci.yml`）。gitleaks、prettier、markdownlint-cli2、pre-commit-hooks を `general/` だけで実行できる。フックの実行環境は pre-commit が自前で用意するため、展開先に言語ランタイムを要求しない。CI は `uvx pre-commit run --all-files` を実行する
 - ts へのシークレット検出（gitleaks）。GitHub の secret scanning push protection は public リポジトリでのみ無償で働き、private リポジトリでは Secret Protection を要するため、ts だけ検出手段が無い状態だった
-- ts の CI へ共通ゲートのジョブ。npm の依存を入れたうえで `uvx pre-commit run --all-files` を実行する。reusable-node-ci は pre-commit を実行しないため、ts の CI だけ共通検査が抜けていた
+- ts の CI での共通検査。`ci.yml` が呼ぶ reusable-node-ci が `pre-commit run --all-files` を実行するため、npm スクリプトが持たない gitleaks や YAML 構文の検査も Node のリポジトリで走る
 - ts の `scripts/setup.sh`。`npm install` とフックの有効化を他種別と同じ入口へ揃えた
 
 ### Changed

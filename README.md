@@ -95,7 +95,7 @@ CI でしか落ちない項目が増えたら、前段へ下ろすべきもの�
 
 - 実装言語なし: `general/github-workflows/ci.yml` が uv を導入し、`uvx pre-commit run --all-files` を実行する
 - python, c: `ci.yml` が sakashita44/.github の reusable-python-ci を呼ぶ。このワークフローは `pre-commit run --all-files` を含むため、共通検査と言語別検査の両方が走る
-- ts: `ci.yml` が共通ゲートのジョブと reusable-node-ci の呼び出しを持つ。共通ゲートのジョブは npm の依存を入れてから `uvx pre-commit run --all-files` を実行する。reusable-node-ci は npm スクリプト（eslint、TypeScript の整形、型検査、テスト、ビルド）を実行する
+- ts: `ci.yml` が sakashita44/.github の reusable-node-ci を呼ぶ。このワークフローは npm の依存を入れてから `pre-commit run --all-files` を実行し、続けて型検査、テスト、ビルドを実行する
 
 reusable workflow のジョブ内容を変えるときは参照先を編集する。トリガーは main への pull request で、main へ直接 push する運用では push トリガーを追加する。
 
