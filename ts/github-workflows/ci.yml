@@ -6,5 +6,31 @@ on:
             - main
 
 jobs:
+    # 共通の品質ゲート。npm の依存を使う local フック (prettier, eslint) があるため、
+    # pre-commit を走らせる前に依存を入れる
+    common-gate:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version-file: '.nvmrc'
+                  cache: 'npm'
+
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Setup uv
+              uses: astral-sh/setup-uv@v5
+              with:
+                  enable-cache: true
+
+            # 設定変更で既存ファイルが違反になった場合も検出するため、全ファイルへ掛ける
+            - name: Run pre-commit hooks
+              run: uvx pre-commit run --all-files --show-diff-on-failure
+
     lint-and-test:
         uses: sakashita44/.github/.github/workflows/reusable-node-ci.yml@main
