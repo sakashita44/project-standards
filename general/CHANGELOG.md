@@ -6,4 +6,4 @@
 
 ### Changed
 
-- 共通 CI で使用する `actions/checkout` を v7、`astral-sh/setup-uv` を v10 へ更新
+- 共通 CI で使用する `actions/checkout` と `astral-sh/setup-uv` を v7 へ更新
