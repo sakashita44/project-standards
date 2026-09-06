@@ -36,7 +36,9 @@ issue/PR テンプレートは [sakashita44/.github](https://github.com/sakashit
     cat .pre-commit-config.python.yaml >> .pre-commit-config.yaml && rm .pre-commit-config.python.yaml
     ```
 
-    この追記は展開時の一度きりの操作である。設定を取り込み直す目的で `general/` を再コピーすると、追記済みの内容が失われるか二重に追記される。再コピー後は合成結果を目視で確認のこと
+    この追記は bash で実行する。PowerShell の `cat` は UTF-16LE で書き出すため、`.pre-commit-config.yaml` が読み込めなくなる
+
+    この追記は展開時の一度きりの操作である。設定を取り込み直す目的で `general/` を再コピーすると、追記済みの内容が失われるか二重に追記される。取り込み直しでは言語別レイヤも再コピーが必要になるため、合成前にコミットせず、合成結果を目視で確認のこと
 
 1. `*.template` から拡張子 `.template` を外し、`PLACEHOLDER_` で始まる値を実値へ置換する
 1. `.gitignore` を [github/gitignore](https://github.com/github/gitignore) のテンプレートで置き換え、リポジトリ固有の除外を追加する
@@ -105,12 +107,14 @@ Git index のテキストは LF で正規化する。working tree は、通常�
 | `.editorconfig`                   | エディタが新規作成と保存で用いる改行コードを指示する。対象の分け方は `.gitattributes` と揃える |
 | pre-commit の `mixed-line-ending` | 一つのファイル内での改行コードの混在を検出する。`--fix=no` で実行し、ファイルを書き換えない    |
 
-`--fix=lf` は working tree を CRLF とする Windows 固有スクリプトまで LF へ書き換え、`.gitattributes` の指定を打ち消すため用いない。この結果、ファイル全体が規約と異なる改行コードで統一されている場合はフックが通過する。その状態は `git add` の時点で `.gitattributes` が index を LF へ正規化し、次の checkout で working tree が規約どおりへ戻る。
+`--fix=lf` は working tree を CRLF とする Windows 固有スクリプトまで LF へ書き換え、`.gitattributes` の指定を打ち消すため用いない。この結果、ファイル全体が規約と異なる改行コードで統一されている場合はフックが通過する。その状態は `git add` の時点で `.gitattributes` が index を LF へ正規化する。working tree はそのパスを次に checkout したときに規約どおりへ戻り、コミットしただけでは戻らない。
 
 ### 改行コードの確認
 
-- `git check-attr eol README.md verification/windows-script.ps1` が、前者へ `lf`、後者へ `crlf` を返す
-- working tree で `verification/windows-script.ps1` が CRLF、他のテキストファイルが LF である
+通常のファイルと Windows 固有スクリプトをそれぞれ一つ選び、次を確かめる。本リポジトリでは `README.md` と `verification/windows-script.ps1` を対象とする。
+
+- `git check-attr eol <通常ファイル> <Windows 固有スクリプト>` が、前者へ `lf`、後者へ `crlf` を返す
+- `git ls-files --eol` で、通常のファイルが `i/lf w/lf`、Windows 固有スクリプトが `i/lf w/crlf` である。`w/crlf` の通常ファイルは working tree だけが規約から外れており、`git status` には現れない。該当パスを削除して checkout し直すと戻る
 - LF の行と CRLF の行を併せ持つファイルを作ると `uvx pre-commit run --all-files` が `mixed line ending` で失敗し、そのファイルを書き換えない。確認後はこのファイルを削除する
 - 混在の確認を終えた後に `git status` が意図しない差分を示さない
 
