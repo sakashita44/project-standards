@@ -16,7 +16,9 @@ verification/  # 配布物自身へ品質ゲートを掛けるための検証対
 
 issue/PR テンプレートは [sakashita44/.github](https://github.com/sakashita44/.github) が全リポジトリへ既定として適用するため、本リポジトリでは配布しない。
 
-ルート直下の設定ファイルと `.github/workflows/ci.yml` は、本リポジトリ自身へ `general/` を展開した結果である。配布する設定が自身の検査を通ることを品質ゲートで保つため、`general/` を変更したときはルートへも反映する。ルート固有の調整は各ファイルへ理由とともに書く。
+ルート直下の設定ファイルと `.github/workflows/ci.yml` は、本リポジトリ自身へ `general/` を展開した結果である。配布する設定が自身の検査を通ることを品質ゲートで保つため、`general/` を変更したときはルートへも反映する。反映漏れは CI が `general/` との突き合わせで検出する。ルート固有の調整は各ファイルへ理由とともに書く。
+
+突き合わせの対象外は 2 つある。`.gitignore` は展開手順どおりリポジトリ固有の内容へ差し替えてある。`.github/workflows/ci.yml` は突き合わせの手順を持つ分だけ `general/github-workflows/ci.yml` と異なる。
 
 ## 展開手順
 

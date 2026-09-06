@@ -11,6 +11,8 @@
 - 配布物自身への共通品質ゲートの適用。本リポジトリも展開先の一つとして `general/` をルートへ展開し（`.editorconfig`、`.gitattributes`、`.markdownlint-cli2.jsonc`、`.pre-commit-config.yaml`、`.prettierrc`、`.prettierignore`、`.vscode/settings.json`、`scripts/setup.sh`、`.github/workflows/ci.yml`）、配布する設定が自身の検査を通ることを手作業ではなくフックと CI で保つ
 - `.prettierignore` への `.pre-commit-config.<種別>.yaml` の除外。追記用フラグメントは共通ゲートの `repos` 配下へ入る断片であり、prettier が字下げを文書ルートの位置へ正規化すると追記後の字下げが揃わなくなる。展開直後から合成までの間と、設定を取り込み直す経路で整形が走ると `.pre-commit-config.yaml` が YAML として読めなくなるため、`general/` から配布する
 - 改行コード規約の検証対象 `verification/windows-script.ps1`。展開しただけでは現れない CRLF のファイルを品質ゲートへ与える
+- ルート `.github/workflows/ci.yml` への、`general/` とルートの設定を突き合わせるステップ。CI が実行するのはルート側だけであり、片方だけを更新しても他のどの検査にも現れないため。`.gitignore` とこのワークフロー自身は対象外とする
+- 改行コード規約への `.psm1` と `.psd1` の追加。`.ps1` を CRLF とした理由は PowerShell のモジュールとマニフェストにも当てはまる
 - README への改行コード規約と、`.gitattributes`、EditorConfig、pre-commit の責務分担の記録
 
 ### Changed
