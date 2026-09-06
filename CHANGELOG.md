@@ -20,6 +20,7 @@
 - `general/.editorconfig` へ `.bat`、`.cmd`、`.ps1` を CRLF とする指定を追加。全ファイルへ LF を指定しており、これらの working tree を CRLF とする `.gitattributes` と競合していた
 - `general/.pre-commit-config.yaml` の `mixed-line-ending` を `--fix=no` へ変更。`--fix=lf` は Windows 固有スクリプトを LF へ書き換えて `.gitattributes` の指定を打ち消しており、`pre-commit-hooks` 側も両者の併用に互換性がないとしている
 - 配布する `python/github-workflows/ci.yml`、`ts/github-workflows/ci.yml`、`ts/tsconfig.json`、`ts/tsconfig.base.json`、`c/.cmake-format.yaml` を prettier の整形結果へ揃えた
+- 配布する `general/CHANGELOG.md` を空の `[Unreleased]` へ戻した。展開先が自身の変更を書き始めるための雛形であり、本リポジトリ自身の変更記録が混入していた
 - `ts/package.json.template` と `ts/scripts/setup.sh` の working tree を LF へ戻した。index は LF でありながら working tree だけが CRLF で、`git status` に現れないまま配布経路へ CRLF が流れうる状態だった
 - 改行コードの確認手順を、展開先でも実行できる形へ改めた。`verification/windows-script.ps1` は配布しないため、そのパスを名指しした手順は展開先で対象を持たなかった。あわせて working tree だけの逸脱を暴く `git ls-files --eol` を検査項目へ追加した
 - 展開手順の合成コマンドへ bash で実行する旨を追記。PowerShell の `cat` は UTF-16LE で書き出し、`.pre-commit-config.yaml` を読み込めなくする
