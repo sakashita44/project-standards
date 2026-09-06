@@ -5,15 +5,20 @@
 ## ディレクトリ構成
 
 ```text
-general/    # 全プロジェクト種別で共用する設定と共通の品質ゲート
-ts/         # TypeScript/Node プロジェクト用
-python/     # Python プロジェクト用
-c/          # C/C++, CMake の整形資産。python/ に重ねる追加レイヤ
+general/       # 全プロジェクト種別で共用する設定と共通の品質ゲート
+ts/            # TypeScript/Node プロジェクト用
+python/        # Python プロジェクト用
+c/             # C/C++, CMake の整形資産。python/ に重ねる追加レイヤ
+verification/  # 配布物自身へ品質ゲートを掛けるための検証対象
 ```
 
 `general/` だけで品質ゲートが成立する。実装言語を持たないリポジトリは `general/` のみを展開する。言語別レイヤは、共通ゲートへ自身の検査を追加する差分だけを持つ。
 
 issue/PR テンプレートは [sakashita44/.github](https://github.com/sakashita44/.github) が全リポジトリへ既定として適用するため、本リポジトリでは配布しない。
+
+ルート直下の設定ファイルと `.github/workflows/ci.yml` は、本リポジトリ自身へ `general/` を展開した結果である。配布する設定が自身の検査を通ることを品質ゲートで保つため、`general/` を変更したときはルートへも反映する。反映漏れは CI が `general/` との突き合わせで検出する。ルート固有の調整は各ファイルへ理由とともに書く。
+
+突き合わせの対象外は 2 つある。`.gitignore` は展開手順どおりリポジトリ固有の内容へ差し替えてある。`.github/workflows/ci.yml` は突き合わせの手順を持つ分だけ `general/github-workflows/ci.yml` と異なる。
 
 ## 展開手順
 
@@ -33,7 +38,9 @@ issue/PR テンプレートは [sakashita44/.github](https://github.com/sakashit
     cat .pre-commit-config.python.yaml >> .pre-commit-config.yaml && rm .pre-commit-config.python.yaml
     ```
 
-    この追記は展開時の一度きりの操作である。設定を取り込み直す目的で `general/` を再コピーすると、追記済みの内容が失われるか二重に追記される。再コピー後は合成結果を目視で確認のこと
+    この追記は bash で実行する。PowerShell の `cat` は UTF-16LE で書き出すため、`.pre-commit-config.yaml` が読み込めなくなる
+
+    この追記は展開時の一度きりの操作である。設定を取り込み直す目的で `general/` を再コピーすると、追記済みの内容が失われるか二重に追記される。取り込み直しでは言語別レイヤも再コピーが必要になるため、合成前にコミットせず、合成結果を目視で確認のこと
 
 1. `*.template` から拡張子 `.template` を外し、`PLACEHOLDER_` で始まる値を実値へ置換する
 1. `.gitignore` を [github/gitignore](https://github.com/github/gitignore) のテンプレートで置き換え、リポジトリ固有の除外を追加する
@@ -50,6 +57,7 @@ issue/PR テンプレートは [sakashita44/.github](https://github.com/sakashit
 - python, c: `uv run pre-commit run --all-files` が全フックを通過する
 - ts, python, c: push すると型検査が走る
 - 全種別: main への pull request を作成し、`ci.yml` のジョブが起動する
+- Windows 固有スクリプトを含む場合: 「改行コードの確認」の手順で規約どおりであることを確かめる
 
 ## 検証の段
 
@@ -69,14 +77,14 @@ CI でしか落ちない項目が増えたら、前段へ下ろすべきもの�
 
 `general/.pre-commit-config.yaml` がコミット時の共通検査を定める。
 
-| 検査              | 対象                                                                |
-| ----------------- | ------------------------------------------------------------------- |
-| gitleaks          | ステージ済みの差分に含まれるシークレット                            |
-| prettier          | Markdown、JSON、YAML の整形                                         |
-| markdownlint-cli2 | Markdown のリント                                                   |
-| pre-commit-hooks  | 末尾空白、改行、行末コード、YAML 構文、競合マーカー、大容量ファイル |
+| 検査              | 対象                                                                                    |
+| ----------------- | --------------------------------------------------------------------------------------- |
+| gitleaks          | ステージ済みの差分に含まれるシークレット                                                |
+| prettier          | Markdown、JSON、YAML の整形                                                             |
+| markdownlint-cli2 | Markdown のリント                                                                       |
+| pre-commit-hooks  | 末尾空白、ファイル末尾の改行、改行コードの混在、YAML 構文、競合マーカー、大容量ファイル |
 
-競合マーカーの検出はマージ、リベース、チェリーピックの最中に働く。
+競合マーカーの検出はマージ、リベース、チェリーピックの最中に働く。改行コードの扱いは「改行コード」に記す。
 
 ### プロジェクト種別ごとの追加
 
@@ -90,6 +98,27 @@ CI でしか落ちない項目が増えたら、前段へ下ろすべきもの�
 言語別の検査は、pre-commit の隔離環境ではプロジェクトの依存を解決できない。npm と uv の環境をそのまま使う local フックとして実行する。
 
 テストは push 時の枠をフック設定にコメントとして用意してある。テストを書いた時点でコメントを外す。CI はテストが存在する場合だけ実行する。
+
+## 改行コード
+
+Git index のテキストは LF で正規化する。working tree は、通常のファイルを LF、Windows 固有スクリプト（`.bat`、`.cmd`、`.ps1`）を CRLF とする。
+
+| 設定                              | 担う範囲                                                                                       |
+| --------------------------------- | ---------------------------------------------------------------------------------------------- |
+| `.gitattributes`                  | 規約の正本。index への正規化と、checkout で working tree へ書き出す改行コードを定める          |
+| `.editorconfig`                   | エディタが新規作成と保存で用いる改行コードを指示する。対象の分け方は `.gitattributes` と揃える |
+| pre-commit の `mixed-line-ending` | 一つのファイル内での改行コードの混在を検出する。`--fix=no` で実行し、ファイルを書き換えない    |
+
+`--fix=lf` は working tree を CRLF とする Windows 固有スクリプトまで LF へ書き換え、`.gitattributes` の指定を打ち消すため用いない。この結果、ファイル全体が規約と異なる改行コードで統一されている場合はフックが通過する。その状態は `git add` の時点で `.gitattributes` が index を LF へ正規化する。working tree はそのパスを次に checkout したときに規約どおりへ戻り、コミットしただけでは戻らない。
+
+### 改行コードの確認
+
+通常のファイルと Windows 固有スクリプトをそれぞれ一つ選び、次を確かめる。本リポジトリでは `README.md` と `verification/windows-script.ps1` を対象とする。
+
+- `git check-attr eol <通常ファイル> <Windows 固有スクリプト>` が、前者へ `lf`、後者へ `crlf` を返す
+- `git ls-files --eol` で、通常のファイルが `i/lf w/lf`、Windows 固有スクリプトが `i/lf w/crlf` である。`w/crlf` の通常ファイルは working tree だけが規約から外れており、`git status` には現れない。該当パスを削除して checkout し直すと戻る
+- LF の行と CRLF の行を併せ持つファイルを作ると `uvx pre-commit run --all-files` が `mixed line ending` で失敗し、そのファイルを書き換えない。確認後はこのファイルを削除する
+- 混在の確認を終えた後に `git status` が意図しない差分を示さない
 
 ## CI
 

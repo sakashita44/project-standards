@@ -1,0 +1,35 @@
+name: CI
+
+on:
+    pull_request:
+        branches:
+            - main
+
+jobs:
+    lint:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v7
+
+            # ルート直下の設定は general/ の展開結果である。CI が実行するのはルート側だけで、
+            # 配布物との乖離は他のどの検査にも現れないため、ここで突き合わせる。
+            # .gitignore は展開手順どおり差し替え済み、このワークフローはこのステップの分だけ
+            # general/github-workflows/ci.yml と異なるため、いずれも対象から外す
+            - name: 配布物とルートの設定の一致を確認
+              run: |
+                  for f in .editorconfig .gitattributes .markdownlint-cli2.jsonc .pre-commit-config.yaml .prettierrc .prettierignore .vscode/settings.json scripts/setup.sh; do
+                      diff -u "general/$f" "$f"
+                  done
+
+            # 共通ゲートは pre-commit だけで完結する。
+            # フックの実行環境 (node, go 等) は pre-commit が自前で用意するため、
+            # リポジトリの実装言語を問わずこのジョブだけで足りる
+            - name: Setup uv
+              uses: astral-sh/setup-uv@v7
+              with:
+                  enable-cache: true
+
+            # 設定変更で既存ファイルが違反になった場合も検出するため、全ファイルへ掛ける
+            - name: Run pre-commit hooks
+              run: uvx pre-commit run --all-files --show-diff-on-failure

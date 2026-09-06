@@ -4,6 +4,27 @@
 
 設定はコピーした時点のスナップショットであり、展開先へは伝搬しない。展開先が現在の正本との差分を知るには、そのリポジトリを作成した日付以降の項目を読む。
 
+## 2026-09-06
+
+### Added
+
+- 配布物自身への共通品質ゲートの適用。本リポジトリも展開先の一つとして `general/` をルートへ展開し（`.editorconfig`、`.gitattributes`、`.markdownlint-cli2.jsonc`、`.pre-commit-config.yaml`、`.prettierrc`、`.prettierignore`、`.vscode/settings.json`、`scripts/setup.sh`、`.github/workflows/ci.yml`）、配布する設定が自身の検査を通ることを手作業ではなくフックと CI で保つ
+- `.prettierignore` への `.pre-commit-config.<種別>.yaml` の除外。追記用フラグメントは共通ゲートの `repos` 配下へ入る断片であり、prettier が字下げを文書ルートの位置へ正規化すると追記後の字下げが揃わなくなる。展開直後から合成までの間と、設定を取り込み直す経路で整形が走ると `.pre-commit-config.yaml` が YAML として読めなくなるため、`general/` から配布する
+- 改行コード規約の検証対象 `verification/windows-script.ps1`。展開しただけでは現れない CRLF のファイルを品質ゲートへ与える
+- ルート `.github/workflows/ci.yml` への、`general/` とルートの設定を突き合わせるステップ。CI が実行するのはルート側だけであり、片方だけを更新しても他のどの検査にも現れないため。`.gitignore` とこのワークフロー自身は対象外とする
+- 改行コード規約への `.psm1` と `.psd1` の追加。`.ps1` を CRLF とした理由は PowerShell のモジュールとマニフェストにも当てはまる
+- README への改行コード規約と、`.gitattributes`、EditorConfig、pre-commit の責務分担の記録
+
+### Changed
+
+- `general/.editorconfig` へ `.bat`、`.cmd`、`.ps1` を CRLF とする指定を追加。全ファイルへ LF を指定しており、これらの working tree を CRLF とする `.gitattributes` と競合していた
+- `general/.pre-commit-config.yaml` の `mixed-line-ending` を `--fix=no` へ変更。`--fix=lf` は Windows 固有スクリプトを LF へ書き換えて `.gitattributes` の指定を打ち消しており、`pre-commit-hooks` 側も両者の併用に互換性がないとしている
+- 配布する `python/github-workflows/ci.yml`、`ts/github-workflows/ci.yml`、`ts/tsconfig.json`、`ts/tsconfig.base.json`、`c/.cmake-format.yaml` を prettier の整形結果へ揃えた
+- 配布する `general/CHANGELOG.md` を空の `[Unreleased]` へ戻した。展開先が自身の変更を書き始めるための雛形であり、本リポジトリ自身の変更記録が混入していた
+- `ts/package.json.template` と `ts/scripts/setup.sh` の working tree を LF へ戻した。index は LF でありながら working tree だけが CRLF で、`git status` に現れないまま配布経路へ CRLF が流れうる状態だった
+- 改行コードの確認手順を、展開先でも実行できる形へ改めた。`verification/windows-script.ps1` は配布しないため、そのパスを名指しした手順は展開先で対象を持たなかった。あわせて working tree だけの逸脱を暴く `git ls-files --eol` を検査項目へ追加した
+- 展開手順の合成コマンドへ bash で実行する旨を追記。PowerShell の `cat` は UTF-16LE で書き出し、`.pre-commit-config.yaml` を読み込めなくする
+
 ## 2026-09-05
 
 ### Changed
