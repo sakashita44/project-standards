@@ -4,6 +4,21 @@
 
 設定はコピーした時点のスナップショットであり、展開先へは伝搬しない。展開先が現在の正本との差分を知るには、そのリポジトリを作成した日付以降の項目を読む。
 
+## 2026-09-06
+
+### Added
+
+- 配布物自身への共通品質ゲートの適用。本リポジトリも展開先の一つとして `general/` をルートへ展開し（`.editorconfig`、`.gitattributes`、`.markdownlint-cli2.jsonc`、`.pre-commit-config.yaml`、`.prettierrc`、`.prettierignore`、`.vscode/settings.json`、`scripts/setup.sh`、`.github/workflows/ci.yml`）、配布する設定が自身の検査を通ることを手作業ではなくフックと CI で保つ
+- ルート `.prettierignore` への `.pre-commit-config.<種別>.yaml` の除外。追記用フラグメントは共通ゲートの `repos` 配下へ入る断片であり、prettier が字下げを文書ルートの位置へ正規化すると追記後の字下げが揃わなくなる。展開先は合成時にフラグメントを削除するため、配布する `general/.prettierignore` へは加えない
+- 改行コード規約の検証対象 `verification/windows-script.ps1`。展開しただけでは現れない CRLF のファイルを品質ゲートへ与える
+- README への改行コード規約と、`.gitattributes`、EditorConfig、pre-commit の責務分担の記録
+
+### Changed
+
+- `general/.editorconfig` へ `.bat`、`.cmd`、`.ps1` を CRLF とする指定を追加。全ファイルへ LF を指定しており、これらの working tree を CRLF とする `.gitattributes` と競合していた
+- `general/.pre-commit-config.yaml` の `mixed-line-ending` を `--fix=no` へ変更。`--fix=lf` は Windows 固有スクリプトを LF へ書き換えて `.gitattributes` の指定を打ち消しており、`pre-commit-hooks` 側も両者の併用に互換性がないとしている
+- 配布する `python/github-workflows/ci.yml`、`ts/github-workflows/ci.yml`、`ts/tsconfig.json`、`ts/tsconfig.base.json`、`c/.cmake-format.yaml` を prettier の整形結果へ揃えた
+
 ## 2026-09-05
 
 ### Changed
