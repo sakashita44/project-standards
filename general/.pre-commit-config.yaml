@@ -38,8 +38,11 @@ repos:
           - id: trailing-whitespace
             args: [--markdown-linebreak-ext=md]
           - id: end-of-file-fixer
+          # 一つのファイル内での改行コードの混在だけを検出する。
+          # --fix=lf は working tree を CRLF とする .gitattributes の
+          # Windows 固有スクリプトまで LF へ書き換えるため採らない
           - id: mixed-line-ending
-            args: [--fix=lf]
+            args: [--fix=no]
           - id: check-merge-conflict
           - id: check-yaml
           - id: check-added-large-files
