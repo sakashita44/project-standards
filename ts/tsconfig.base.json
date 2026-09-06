@@ -1,13 +1,13 @@
 {
-  "compilerOptions": {
-    "target": "ES2022",
-    "lib": ["ES2022"],
-    "module": "ESNext",
-    // moduleResolution: "bundler" は Vite/Webpack 等バンドラ経由のプロジェクト向け,
-    // Node.js で直接実行する CLI/ライブラリ等は "NodeNext" を使用する
-    "moduleResolution": "bundler",
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true
-  }
+    "compilerOptions": {
+        "target": "ES2022",
+        "lib": ["ES2022"],
+        "module": "ESNext",
+        // moduleResolution: "bundler" は Vite/Webpack 等バンドラ経由のプロジェクト向け,
+        // Node.js で直接実行する CLI/ライブラリ等は "NodeNext" を使用する
+        "moduleResolution": "bundler",
+        "strict": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true
+    }
 }
