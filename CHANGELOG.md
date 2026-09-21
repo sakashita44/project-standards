@@ -4,6 +4,16 @@
 
 設定はコピーした時点のスナップショットであり、展開先へは伝搬しない。展開先が現在の正本との差分を知るには、そのリポジトリを作成した日付以降の項目を読む。
 
+## 2026-09-22
+
+### Added
+
+- 任意の設定例 `general/mise.local.toml.example`。CAD や vendor SDK など mise が版を管理しない外部 CLI について、特定のプロジェクトだけ別の実体を使う場合の置き場所をプロジェクトごとに決めずに済ませる。実体の `mise.local.toml` はホスト固有の値を持つため、`.gitignore` のプレースホルダと展開手順へ除外を加えた
+
+### Changed
+
+- 実装言語なしと ts の `scripts/setup.sh`、およびルートの `scripts/setup.sh` で、`uv tool install pre-commit` の後にフックを生成するようにした。`uvx` の一時環境は uv の cache 内にあり、cache を削除するとフックが記録した Python の絶対パスが失われてフックが失敗していた
+
 ## 2026-09-06
 
 ### Added

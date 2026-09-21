@@ -43,7 +43,10 @@ issue/PR テンプレートは [sakashita44/.github](https://github.com/sakashit
     この追記は展開時の一度きりの操作である。設定を取り込み直す目的で `general/` を再コピーすると、追記済みの内容が失われるか二重に追記される。取り込み直しでは言語別レイヤも再コピーが必要になるため、合成前にコミットせず、合成結果を目視で確認のこと
 
 1. `*.template` から拡張子 `.template` を外し、`PLACEHOLDER_` で始まる値を実値へ置換する
-1. `.gitignore` を [github/gitignore](https://github.com/github/gitignore) のテンプレートで置き換え、リポジトリ固有の除外を追加する
+1. `.gitignore` を [github/gitignore](https://github.com/github/gitignore) のテンプレートで置き換え、`mise.local.toml` を含むリポジトリ固有の除外を追加する
+
+    `mise.local.toml.example` は、mise が版を管理しない外部 CLI の場所をホストごとに差し替える任意の設定例である。使わない場合は削除し、使う場合も共有するスクリプトと文書では標準のコマンド名を用いることを推奨する
+
 1. `github-workflows/ci.yml` を `.github/workflows/ci.yml` へ移す
 1. `dependabot.yml` を `.github/dependabot.yml` へ移し、使用するエコシステムのコメントアウトを解除する
 1. フックを有効化する
