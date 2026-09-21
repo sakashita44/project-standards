@@ -6,5 +6,8 @@ node_modules/
 __pycache__/
 *.py[cod]
 
+# ホスト固有の設定
+mise.local.toml
+
 # エディタ・OS
 .DS_Store

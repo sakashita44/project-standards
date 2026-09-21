@@ -1,0 +1,7 @@
+# ホスト固有の外部ツールの場所を差し替える任意の設定例。
+# mise が版を管理しない CLI（CAD、vendor SDK など）について、このプロジェクトだけ
+# 別の実体を使う必要がある場合に限り、mise.local.toml へコピーして書き換える。
+# mise.local.toml はホスト固有の値を持つため Git 管理外とする。
+
+[env]
+_.path = 'C:\path\to\tool\bin'
