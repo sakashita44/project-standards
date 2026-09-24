@@ -45,7 +45,10 @@ issue/PR テンプレートは [sakashita44/.github](https://github.com/sakashit
 1. `*.template` から拡張子 `.template` を外し、`PLACEHOLDER_` で始まる値を実値へ置換する
 1. `.gitignore` を [github/gitignore](https://github.com/github/gitignore) のテンプレートで置き換え、`mise.local.toml` を含むリポジトリ固有の除外を追加する
 
-    `mise.local.toml.example` は、mise が版を管理しない外部 CLI の場所をホストごとに差し替える任意の設定例である。使わない場合は削除し、使う場合も共有するスクリプトと文書では標準のコマンド名を用いることを推奨する
+    `mise.local.toml.example` は、mise の設定をホストごとに上書きする任意の設定例である。次の二つの用途を示す。使わない場合は削除する
+
+    - 外部 CLI の場所の差し替え: mise が版を管理しない外部 CLI について、このホストだけ別の実体を使う。使う場合も、共有するスクリプトと文書では標準のコマンド名を用いることを推奨する
+    - 宣言されたツールの無視: プロジェクトの `mise.toml` が宣言したツールのうち、このホストの mise で解決できないものを `disable_tools` に指定し、警告と `mise install` の失敗を避ける
 
 1. `github-workflows/ci.yml` を `.github/workflows/ci.yml` へ移す
 1. `dependabot.yml` を `.github/dependabot.yml` へ移し、使用するエコシステムのコメントアウトを解除する
