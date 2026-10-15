@@ -1,8 +1,7 @@
 # pre-commit フック設定
 # 使い方: uvx pre-commit install --hook-type pre-commit --hook-type pre-push
 #
-# 実装言語に依らず全リポジトリが持つ共通の品質ゲート。
-# 言語別レイヤは自身の追加フックをこのファイルの末尾へ追記する
+# 実装言語に依らず全リポジトリが持つ共通の品質ゲート
 default_stages: [pre-commit]
 
 repos:
@@ -36,7 +35,6 @@ repos:
       rev: v6.0.0
       hooks:
           - id: trailing-whitespace
-            args: [--markdown-linebreak-ext=md]
           - id: end-of-file-fixer
           # 一つのファイル内での改行コードの混在だけを検出する。
           # --fix=lf は working tree を CRLF とする .gitattributes の

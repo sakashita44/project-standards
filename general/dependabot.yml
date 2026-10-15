@@ -1,5 +1,4 @@
 # Dependabot 設定
-# 展開先では .github/dependabot.yml に配置する
 
 version: 2
 updates:
