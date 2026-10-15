@@ -1,60 +1,46 @@
 {
     // 除外対象は .gitignore から取る (markdownlint-cli2 は .markdownlintignore を読まない)
     "gitignore": true,
-    // .gitignore の内容に依らず常に除外するもの
-    "ignores": ["node_modules/**", ".venv/**", ".dvc/**"],
     "config": {
-        // デフォルトは全ルール有効
-        "default": true,
-        // MD003: 見出しスタイル - ATX形式 (#)
         "MD003": {
             "style": "atx",
         },
-        // MD004: リストマーカー - ダッシュ (-) ※Prettier互換
+        // Prettier の出力に合わせる
         "MD004": {
             "style": "dash",
         },
-        // MD007: インデント - 4スペース
         "MD007": {
             "indent": 4,
         },
-        // MD009: 末尾空白 - 許可しない (改行用の2スペースも禁止)
+        // 行末 2 スペースによる改行を許さない。.editorconfig と pre-commit の trailing-whitespace も同じ方針とする
         "MD009": {
             "br_spaces": 0,
         },
-        // MD013: 行の長さ - 無効化 (日本語文書のため)
+        // 日本語の文書は行長で折り返さない
         "MD013": false,
-        // MD024: 重複見出し - 同一階層のみ禁止
+        // Keep a Changelog 形式の CHANGELOG は、版ごとに同じ見出しが並ぶ
         "MD024": {
             "siblings_only": true,
         },
-        // MD029: 順序付きリスト - すべて "1." を使用 ※Prettier互換
+        // Prettier の出力に合わせる
         "MD029": {
             "style": "one",
         },
-        // MD033: インラインHTML - 許可 (技術文書で必要な場合あり)
+        // 技術文書では HTML を要する場合がある
         "MD033": false,
-        // MD034: 裸のURL禁止 - 有効
-        "MD034": true,
-        // MD035: 水平線スタイル - ハイフン3つ
         "MD035": {
             "style": "---",
         },
-        // MD041: 最初の行は見出し - 有効
-        "MD041": true,
-        // MD046: コードブロック - フェンス形式 (```)
         "MD046": {
             "style": "fenced",
         },
-        // MD048: コードフェンス - バッククォート
         "MD048": {
             "style": "backtick",
         },
-        // MD049: 強調スタイル - アンダースコア (_) ※Prettier互換
+        // Prettier の出力に合わせる
         "MD049": {
             "style": "underscore",
         },
-        // MD050: 太字スタイル - アスタリスク (**)
         "MD050": {
             "style": "asterisk",
         },

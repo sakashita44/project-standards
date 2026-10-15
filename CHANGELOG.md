@@ -4,6 +4,21 @@
 
 設定はコピーした時点のスナップショットであり、展開先へは伝搬しない。展開先が現在の正本との差分を知るには、そのリポジトリを作成した日付以降の項目を読む。
 
+## 2026-10-16
+
+### Changed
+
+- Markdown の行末 2 スペースによる改行を禁止する方針へ統一。markdownlint の `MD009` が禁じる一方で、`.editorconfig` の `[*.md]` と pre-commit の `trailing-whitespace --markdown-linebreak-ext=md` が許していた。`.editorconfig` は `[*]` で `trim_trailing_whitespace = true` を指定する
+- `general/.markdownlint-cli2.jsonc` から、`default: true` と同じ指定（`MD034`、`MD041`）、`node_modules`、`.venv`、`.dvc` の除外、設定値をなぞるだけのコメントを削除。除外は `.gitignore` に任せ、コメントは設定値から読み取れない理由に絞った
+- `general/scripts/setup.sh` と `ts/scripts/setup.sh` に、`uvx pre-commit` が永続環境の pre-commit を使うことを示すコメントを追加
+- 配布する `general/github-workflows/ci.yml` とルートの CI で、`astral-sh/setup-uv` を v10.3.0 へ更新。v8 以降はメジャー版のタグがないため、リリースの版を指定する
+- `general/.gitattributes` のコメントの全角カンマを読点へ改めた
+- `general/.pre-commit-config.yaml` と `general/dependabot.yml` から、展開先では意味を持たない展開手順の記述を削除
+
+### Removed
+
+- `general/.prettierignore`。`.venv`、`node_modules`、`.dvc` の除外は `.gitignore` が担い、追記用フラグメントは展開時に削除されるため、展開先では不要になった。フラグメントを追跡する本リポジトリでは、ルートの `.prettierignore` に除外を残し、`general/` との突き合わせの対象外とした
+
 ## 2026-09-24
 
 ### Added
