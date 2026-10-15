@@ -27,7 +27,8 @@ jobs:
             # フックの実行環境 (node, go 等) は pre-commit が自前で用意するため、
             # リポジトリの実装言語を問わずこのジョブだけで足りる
             - name: Setup uv
-              uses: astral-sh/setup-uv@v7
+              # v8 以降はメジャー版のタグがないため、リリースの版を指定する
+              uses: astral-sh/setup-uv@v10.3.0
               with:
                   enable-cache: true
 
